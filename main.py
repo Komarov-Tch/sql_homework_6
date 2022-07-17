@@ -138,7 +138,14 @@ class Db:
             print('Нет такого пользователя')
 
     def __search_person_id(self, person_id):
-        pass
+        result = []
+        for id in person_id:
+            self.cur.execute(
+                '''SELECT name, family FROM person
+                WHERE id = %s''', (id,)
+            )
+            result.append(self.cur.fetchone())
+        self.__print_result(result)
 
     def search_name(self, name):
         self.cur.execute(
@@ -158,7 +165,7 @@ class Db:
 
     def search_email(self, email):
         self.cur.execute(
-            ''' SELECT e.personal_id
+            ''' SELECT e.person_id
             FROM email e
             WHERE e.email = %s
             ''', (email,)
@@ -167,8 +174,7 @@ class Db:
 
     def search_telephone(self, tel_num):
         self.cur.execute(
-            ''' SELECT t.personal_id
-            FROM telephone t
+            ''' SELECT t.person_id FROM telephone t
             WHERE t.phone_num = %s
             ''', (tel_num,)
         )
